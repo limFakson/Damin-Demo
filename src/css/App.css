@@ -1,0 +1,68 @@
+@font-face {
+    font-family: "Nerd";
+    src: url(../../public/fonts/FiraCodeNerdFont-Regular.ttf);
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Nerd', sans-serif;
+}
+
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+p {
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.is_active {
+    background-color: #007bff;
+    border-radius: 16px;
+    padding: 4px 15px;
+    color: #fff;
+}
+
+.navs li {
+    cursor: pointer;
+    border-radius: 16px;
+    padding: 4px 15px;
+    transition: all 0.2s ease-in;
+}
+
+.navs li:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.view {
+    background-color: #f8f8f8;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.is_chat {
+    background-color: #3d3f42;
+    border-radius: 16px;
+    padding: 6px 15px;
+    color: #f4f4ff;
+}
+
+.pdf-items {
+    cursor: pointer;
+    border-radius: 16px;
+    padding: 6px 15px;
+    transition: all 0.2s ease-in;
+}
+
+.pdf-items:hover {
+    background-color: #3d3f42;
+    color: #f4f4ff;
+}
