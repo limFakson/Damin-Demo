@@ -1,6 +1,8 @@
 import React, { useRef } from 'react'
 import { useState, useEffect } from 'react';
-import PdfImg from '../file/pdf-img-view.png'
+import PdfImg from '../file/pdf-img-view.png';
+import ReactMarkdown from 'react-markdown';
+import Logo from "../file/Asset 3figma2.png";
 // import io from 'socket.io-client';
 
 // const socket = io('http://localhost:8000');
@@ -10,13 +12,14 @@ const Summarizer = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [query, setQuery] = useState("");
+    const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(true)
 
     const pdfName = useRef(null);
 
-    const pdfs = [0, 2, 2, 2]
-
-    useEffect(() => {
-        const ws = new WebSocket(`ws://localhost:8001/chat/summarize`);
+    console.log(query)
+    const apiCall = async (id) => {
+        const ws = new WebSocket(`ws://localhost:8000/chat/summarize?pdf_id=${id}`);
 
         ws.onopen = () => {
             console.log("WebSocket connection established");
@@ -39,24 +42,27 @@ const Summarizer = () => {
         setSocket(ws);
 
         // Cleanup the WebSocket connection when component unmounts
-        return () => {
-            ws.close();
+        // return () => {
+        //     ws.close();
+        // };
+    }
+
+    useEffect(() => {
+        const getFilesFromLocalStorage = () => {
+            try {
+                const files = JSON.parse(localStorage.getItem("files")) || [];
+                setFile(files);
+            } catch (error) {
+                console.error("Error parsing localStorage data:", error);
+                setFile([]);
+            }
         };
+
+        setTimeout(() => {
+            getFilesFromLocalStorage();
+            setLoading(false);
+        }, 1000);
     }, []);
-
-    // const sendMessage = () => {
-    //     if (input.trim() === "") return;
-
-    //     const userMessage = { text: input, type: "sent" };
-    //     setMessages((prevMessages) => [...prevMessages, userMessage]);
-
-    //     setTimeout(() => {
-    //         const botResponse = { text: "Hello, How are you doing", type: "received" };
-    //         setMessages((prevMessages) => [...prevMessages, botResponse]);
-    //     }, 500);
-
-    //     setInput("");
-    // };
 
     const sendMessage = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
@@ -71,46 +77,65 @@ const Summarizer = () => {
         }
     };
 
-    const SearchQuery = () => {
+    const SearchQuery = (id) => {
         const name = pdfName.current.textContent;
         const newUrl = `${window.location.pathname}?c=${name}`;
         window.history.pushState(null, "", newUrl);
+        apiCall(id)
         setQuery(name);
     }
 
     return (
-        <div className="pr-20 mr-16 overflow-auto relative">
+        <div className="mr-16 overflow-auto relative">
             <div className="flex justify-center items-end bg-gray-100">
-                <div className="side-nav h-[635px] w-[40%] bg-white pt-6">
-                    <div className="side-items pt-10 px-6">
-                        <h2 className='pl-2'>Recent</h2>
-                        {pdfs.slice(0, 3).map((item, index) => (
-                            <div
-                                key={index}
-                                className="pdf-items is_chat mt-3 pt-5 px-5 flex justify-start items-center gap-2"
-                                onClick={SearchQuery}
-                            >
-                                <div className="img w-[30px]">
-                                    <img src={PdfImg} className="w-full h-full" alt="" />
-                                </div>
-                                <div className="pdf-content" data-details="">
-                                    <p ref={pdfName}>{item.name || "Pdf-view-demo.pdf"}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                <div className="side-nav h-[635px] w-[30%] bg-white pt-6">
+                    {loading ? (
+                        <p>Loading.....</p>
+                    ) : (
+                        <div className="side-items pt-10 px-6">
+                            <h2 className="pl-2">Recent</h2>
+                            {file.length > 0 ? (
+                                file.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="pdf-items is_chat mt-3 pt-5 px-5 flex justify-start items-center gap-2"
+                                        onClick={() => SearchQuery(item.id)}
+                                    >
+                                        <div className="img w-[30px]">
+                                            <img src={PdfImg} className="w-full h-full" alt="PDF Icon" />
+                                        </div>
+                                        <div className="pdf-content" data-details="">
+                                            <p ref={pdfName}>{item.name || "Pdf-view-demo.pdf"}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No recent files found.</p>
+                            )}
+                        </div>
+                    )}
                 </div>
-                <div className="w-full mb-2 rounded-lg shadow-lg ml-14 flex flex-col">
+                <div className="w-full mb-2 rounded-lg shadow-lg ml-6 flex flex-col h-[635px] overflow-y-scroll">
                     <div className="flex-1 p-4 overflow-y-auto space-y-3">
                         <div
-                            className={`max-w-[90%] w-full grid`}
+                            className={`w-full grid`}
                         >
                             {messages.map((message, index) => (
-                                <div key={index} className={`max-w-[70%] w-[70%] px-4 py-2 rounded-lg my-2 ${message.type === "sent"
-                                    ? "bg-green-200 self-end text-right justify-self-end"
-                                    : "bg-gray-200 self-start"
-                                    }`}>
-                                    {message.text}
+                                <div key={index} className='grid'>
+                                    {message.type !== "sent" ? (
+                                        <div className='self-start flex items-start justify-start px-4 py-2 rounded-lg my-2 w-[80%]'>
+                                            <img src={Logo} className='w-[40px] h-[35px]' alt="" />
+                                            <div className='pl-4 pt-2'>
+                                                <ReactMarkdown>
+                                                    {message.text}
+                                                </ReactMarkdown>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <ReactMarkdown className={`px-4 py-2 rounded-lg my-2 max-w-[60%] w-auto bg-gray-500 text-[#f4f4f4] self-end text-right justify-self-end`}>
+                                            {message.text}
+                                        </ReactMarkdown>
+                                    )}
                                 </div>
                             ))}
                         </div>

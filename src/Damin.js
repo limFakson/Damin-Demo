@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Logo from "./file/Asset 3figma2.png";
 import './index.css';
 import './css/App.css'
@@ -15,9 +15,30 @@ const App = () => {
   const handleNavClick = (pageName) => {
     setActivePage(pageName);
 
-    const urlWithoutQuery = window.location.origin + window.location.pathname;
-    window.history.pushState({}, '', urlWithoutQuery);
+    // const urlWithoutQuery = window.location.origin + window.location.pathname;
+    // window.history.pushState({}, '', urlWithoutQuery);
   };
+
+  useEffect(() => {
+    const startApi = async () => {
+      const Starter = "http://localhost:8000/home"
+      try {
+        const response = await fetch(`${Starter}`, {
+          method: "GET",
+          headers: {
+            'Content-Type': "application/json",
+          }
+        })
+        if (response.ok) {
+          const result = await response.json()
+          console.log(result)
+        }
+      } catch {
+        alert("Unable to connect")
+      }
+    }
+    startApi()
+  })
 
   const renderPage = () => {
     switch (activePage) {
