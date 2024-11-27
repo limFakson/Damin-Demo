@@ -15,8 +15,8 @@ const App = () => {
   const handleNavClick = (pageName) => {
     setActivePage(pageName);
 
-    // const urlWithoutQuery = window.location.origin + window.location.pathname;
-    // window.history.pushState({}, '', urlWithoutQuery);
+    const urlWithoutQuery = window.location.origin + window.location.pathname;
+    window.history.pushState({}, '', urlWithoutQuery);
   };
 
   useEffect(() => {
