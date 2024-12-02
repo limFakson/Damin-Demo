@@ -1,11 +1,7 @@
-import React, { useRef } from 'react'
-import { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PdfImg from '../file/pdf-img-view.png';
 import ReactMarkdown from 'react-markdown';
 import Logo from "../file/Asset 3figma2.png";
-// import io from 'socket.io-client';
-
-// const socket = io('http://localhost:8000');
 
 const Summarizer = () => {
     const [socket, setSocket] = useState(null);
@@ -13,22 +9,44 @@ const Summarizer = () => {
     const [input, setInput] = useState("");
     const [query, setQuery] = useState("");
     const [file, setFile] = useState(null);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
+    const messagesEndRef = useRef(null);
 
     const pdfName = useRef(null);
 
-    console.log(query)
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
     const apiCall = async (id) => {
-        const ws = new WebSocket(`ws://localhost:8000/chat/summarize?pdf_id=${id}`);
+        const ws = new WebSocket(`ws://localhost:8005/chat/summarize?pdf_id=${id}`);
 
         ws.onopen = () => {
             console.log("WebSocket connection established");
         };
 
         ws.onmessage = (event) => {
-            console.log("Message received from server:", event.data);
-            const botMessage = { text: event.data, type: "received" };
-            setMessages((prev) => [...prev, botMessage]);
+            try {
+                const data = JSON.parse(event.data);
+
+                if (Array.isArray(data)) {
+                    console.log(data.map((item) => ({ text: item.text, type: item.type })))
+                    const botMessages = data.map((item) => ({ text: item.text, type: item.type }));
+                    setMessages((prev) => [...prev, ...botMessages]);
+                } else {
+                    const botMessage = { text: data, type: "received" };
+                    setMessages((prev) => [...prev, botMessage]);
+                }
+            } catch (error) {
+                console.error("Failed to parse WebSocket message:", error);
+                const botMessage = { text: event.data, type: "received" };
+                setMessages((prev) => [...prev, botMessage]);
+            }
         };
 
         ws.onerror = (error) => {
@@ -41,11 +59,10 @@ const Summarizer = () => {
 
         setSocket(ws);
 
-        // Cleanup the WebSocket connection when component unmounts
-        // return () => {
-        //     ws.close();
-        // };
-    }
+        return () => {
+            ws.close();
+        };
+    };
 
     useEffect(() => {
         const getFilesFromLocalStorage = () => {
@@ -66,12 +83,13 @@ const Summarizer = () => {
 
     const sendMessage = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
-            const message = JSON.stringify({ type: "message", content: input });
             const userMessage = { text: input, type: "sent" };
+            const updatedMessages = [...messages, userMessage];
+
             socket.send(JSON.stringify(userMessage));
-            setMessages((prevMessages) => [...prevMessages, userMessage]);
-            console.log("Message sent to server:", message);
-            setInput(""); // Clear the input
+            setMessages(updatedMessages);
+
+            setInput("");
         } else {
             console.error("WebSocket is not connected");
         }
@@ -81,12 +99,24 @@ const Summarizer = () => {
         const name = pdfName.current.textContent;
         const newUrl = `${window.location.pathname}?c=${name}`;
         window.history.pushState(null, "", newUrl);
-        apiCall(id)
-        setQuery(name);
-    }
+        setQuery(id);
+
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.close();
+        }
+        setMessages([])
+
+        apiCall(id);
+    };
+
+    const handleKeyPress= (event) => {
+        if (event.key === "Enter") {
+            sendMessage()
+        }
+    };
 
     return (
-        <div className="mr-16 overflow-auto relative">
+        <div className="mr-16 overflow-auto relative" key={query}>
             <div className="flex justify-center items-end bg-gray-100">
                 <div className="side-nav h-[635px] w-[30%] bg-white pt-6">
                     {loading ? (
@@ -94,7 +124,7 @@ const Summarizer = () => {
                     ) : (
                         <div className="side-items pt-10 px-6">
                             <h2 className="pl-2">Recent</h2>
-                            {file.length > 0 ? (
+                            {file?.length > 0 ? (
                                 file.map((item, index) => (
                                     <div
                                         key={index}
@@ -138,6 +168,7 @@ const Summarizer = () => {
                                     )}
                                 </div>
                             ))}
+                            <div ref={messagesEndRef}></div>
                         </div>
                     </div>
                     {/* Chat Input */}
@@ -147,6 +178,7 @@ const Summarizer = () => {
                             placeholder="Type a message..."
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={handleKeyPress}
                             className="flex-1 py-2 px-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <button
@@ -161,6 +193,6 @@ const Summarizer = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Summarizer;

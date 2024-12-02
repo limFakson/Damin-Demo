@@ -3,7 +3,8 @@ import { useState } from 'react';
 import PdfImg from '../file/pdf-img-view.png'
 
 const Upload = () => {
-    const uploadButton = useRef(null)
+    const uploadButton = useRef(null);
+    const confirmation = useRef(null);
 
     const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -20,6 +21,8 @@ const Upload = () => {
 
     const handleRemoveFile = () => {
         setUploadedFile(null);
+        uploadButton.current.style.display = 'none'
+        confirmation.current.textContent = ""
     };
 
     const saveFileToLocalStorage = (fileName) => {
@@ -43,8 +46,10 @@ const Upload = () => {
             if (response.ok) {
                 const result = await response.json();
                 console.log("API Response:", result);
-                saveFileToLocalStorage(result.pdf)
+                confirmation.current.textContent = await result.message;
+                saveFileToLocalStorage(result.pdf);
             } else {
+                confirmation.current.textContent = response.statusText
                 console.error("Error:", response.status, response.statusText);
             }
         } catch (error) {
@@ -69,7 +74,8 @@ const Upload = () => {
                     </div>
                 </div>
                 <div className="uploader grid">
-                    <div className="view w-[420px] h-[480px] pt-4">
+                    <div className="view w-[420px] h-[480px] pt-2">
+                        <p className='text-center text-green-500 pb-2' ref={confirmation}></p>
                         <div
                             className="upload_pdf flex flex-col justify-center items-center"
                             onDragOver={(e) => e.preventDefault()}
