@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import Logo from "../file/Asset 3figma2.png";
 
 const Summarizer = () => {
+    const WSApiUrl = process.env.REACT_APP_WS_URL
     const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
@@ -24,7 +25,7 @@ const Summarizer = () => {
     }, [messages]);
 
     const apiCall = async (id) => {
-        const ws = new WebSocket(`ws://localhost:8005/chat/summarize?pdf_id=${id}`);
+        const ws = new WebSocket(`${WSApiUrl}/chat/summarize?pdf_id=${id}`);
 
         ws.onopen = () => {
             console.log("WebSocket connection established");
@@ -109,7 +110,7 @@ const Summarizer = () => {
         apiCall(id);
     };
 
-    const handleKeyPress= (event) => {
+    const handleKeyPress = (event) => {
         if (event.key === "Enter") {
             sendMessage()
         }
@@ -162,7 +163,7 @@ const Summarizer = () => {
                                             </div>
                                         </div>
                                     ) : (
-                                        <ReactMarkdown className={`px-4 py-2 rounded-lg my-2 max-w-[60%] w-auto bg-gray-500 text-[#f4f4f4] self-end text-right justify-self-end`}>
+                                        <ReactMarkdown className={`px-4 py-2 rounded-lg my-2 max-w-[60%] w-auto bg-gray-500 text-[#f4f4f4] self-end text-left justify-self-end`}>
                                             {message.text}
                                         </ReactMarkdown>
                                     )}

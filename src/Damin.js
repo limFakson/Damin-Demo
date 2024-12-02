@@ -10,6 +10,8 @@ import History from "./pages/History";
 
 
 const App = () => {
+  const ApiUrl = process.env.REACT_APP_API_URL
+  console.log(ApiUrl)
   const [activePage, setActivePage] = useState("upload");
 
   const handleNavClick = (pageName) => {
@@ -21,7 +23,7 @@ const App = () => {
 
   useEffect(() => {
     const startApi = async () => {
-      const Starter = "http://localhost:8000/home"
+      const Starter = `${ApiUrl}/home`
       try {
         const response = await fetch(`${Starter}`, {
           method: "GET",
