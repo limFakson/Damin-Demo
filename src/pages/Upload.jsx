@@ -58,11 +58,12 @@ const Upload = () => {
     }
 
     return (
-        <div className='p-8 my-8 mr-16 ml-12'>
-            <div className="upload flex justify-center items-start">
-                <div className="form_upload w-[50%] pt-14 pr-20">
-                    <h1>Upload a PDF to begin</h1>
-                    <div className="page_content mt-4">
+        <div className="p-4 sm:p-6 md:p-8 my-4 md:my-8 mx-4 lg:mx-12">
+            <div className="upload flex flex-col md:flex-row flex-wrap justify-center items-start">
+                {/* Info Section */}
+                <div className="form_upload w-full md:w-[50%] mb-8 md:mb-0 pt-6 md:pt-10 pr-0 md:pr-6 lg:pr-10">
+                    <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">Upload a PDF to begin</h1>
+                    <div className="page_content mt-4 text-sm sm:text-base text-gray-700">
                         <p>
                             The Damin TTS App is designed to bridge the gap in accessibility for individuals with special educational needs.
                             By leveraging advanced Text-to-Speech technology, our platform converts written PDF documents into clear,
@@ -73,34 +74,38 @@ const Upload = () => {
                         </p>
                     </div>
                 </div>
-                <div className="uploader grid">
-                    <div className="view w-[420px] h-[480px] pt-2">
-                        <p className='text-center text-green-500 pb-2' ref={confirmation}></p>
+
+                {/* Uploader Section */}
+                <div className="uploader w-full md:w-[50%] flex flex-col items-center">
+                    <div className="view w-full max-w-sm h-auto">
+                        {/* Confirmation Text */}
+                        <p className="text-center text-green-500 pb-2 text-sm" ref={confirmation}></p>
+
+                        {/* Upload Area */}
                         <div
                             className="upload_pdf flex flex-col justify-center items-center"
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={handleFileDrop}
                         >
-                            {/* PDF Upload Area */}
                             {!uploadedFile ? (
-                                <div className="drag-drop w-[380px] h-[440px] border-[3px] border-dashed border-black flex flex-col justify-center items-center">
-                                    <div className="drop p-6 grid text-center">
+                                <div className="drag-drop w-full max-w-[340px] sm:max-w-sm h-[360px] sm:h-[400px] border-[3px] border-dashed border-black flex flex-col justify-center items-center rounded-md">
+                                    <div className="drop p-4 sm:p-6 text-center grid">
                                         <div
-                                            className="plus mb-4 justify-self-center rounded-full p-4 bg-[#0404043d] flex justify-center items-center w-[60px] h-[60px]"
+                                            className="plus mb-4 justify-self-center rounded-full p-4 bg-[#0404043d] flex justify-center items-center w-[50px] h-[50px] sm:w-[60px] sm:h-[60px]"
                                             style={{ lineHeight: "0" }}
                                         >
-                                            <i className="fa-solid fa-plus text-3xl text-[#007bff]"></i>
+                                            <i className="fa-solid fa-plus text-2xl sm:text-3xl text-[#007bff]"></i>
                                         </div>
-                                        <p>
+                                        <p className="text-sm sm:text-base">
                                             Drop your PDF document here or{" "}
                                             <label
                                                 htmlFor="file-input"
-                                                className="text-[#007bff] cursor-pointer"
+                                                className="text-[#007bff] cursor-pointer underline"
                                             >
                                                 select here
                                             </label>
                                         </p>
-                                        <p className="formats pt-2 text-gray-400">PDF file less than 30MB</p>
+                                        <p className="formats pt-2 text-gray-400 text-xs sm:text-sm">PDF file less than 30MB</p>
                                         <input
                                             type="file"
                                             id="file-input"
@@ -111,18 +116,17 @@ const Upload = () => {
                                     </div>
                                 </div>
                             ) : (
-                                // PDF View Area
-                                <div className="pdf-view w-[350px] h-[420px] border-[3px] border-dashed border-black p-4 flex flex-col items-center justify-between">
-                                    <div className="pdf-img w-full h-full flex justify-center items-center bg-gray-200">
+                                <div className="pdf-view w-full max-w-[340px] sm:max-w-sm h-auto border-[3px] border-dashed border-black p-4 flex flex-col items-center justify-between rounded-md">
+                                    <div className="pdf-img w-full h-[180px] sm:h-[200px] flex justify-center items-center bg-gray-200 rounded-md">
                                         <img
                                             src={PdfImg}
                                             alt="Uploaded PDF"
-                                            className="w-[200px] h-[220px] object-contain"
+                                            className="w-[120px] sm:w-[150px] h-auto object-contain"
                                         />
                                     </div>
-                                    <p className="text-center text-gray-600 mt-4">{uploadedFile.name}</p>
+                                    <p className="text-center text-gray-600 mt-4 text-sm sm:text-base truncate">{uploadedFile.name}</p>
                                     <button
-                                        className="mt-4 bg-[#007bff] rounded-lg text-white px-4 py-2"
+                                        className="mt-4 bg-[#007bff] hover:bg-blue-600 text-white rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base"
                                         onClick={handleRemoveFile}
                                     >
                                         Remove PDF
@@ -131,10 +135,20 @@ const Upload = () => {
                             )}
                         </div>
                     </div>
-                    <button hidden className='justify-self-center bg-[#007bff] mt-3 text-xl w-28 text-[#f4f4f4] h-9 rounded-2xl' ref={uploadButton} onClick={pdfSentUpload}>Upload</button>
+
+                    {/* Hidden Upload Button */}
+                    <button
+                        hidden
+                        className="bg-[#007bff] mt-3 text-sm sm:text-xl w-24 sm:w-28 text-white h-9 rounded-2xl"
+                        ref={uploadButton}
+                        onClick={pdfSentUpload}
+                    >
+                        Upload
+                    </button>
                 </div>
             </div>
         </div>
+
     )
 }
 

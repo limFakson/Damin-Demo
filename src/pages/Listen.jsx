@@ -14,6 +14,7 @@ const Listen = () => {
     const [isPopoutOpen, setIsPopoutOpen] = useState(false);
     const popoutRef = useRef(null);
     const [selectedValues, setSelectedValues] = useState([]);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const handleTextChange = (e) => setTextInput(e.target.value);
 
@@ -64,7 +65,8 @@ const Listen = () => {
     const ClosePdfPopOut = () => {
         setIsPopoutOpen(false);
         setSlide(null);
-        setSelectedValues([])
+        setSelectedValues([]);
+        console.log(query, loading)
     };
 
     const SelectPage = (e) => {
@@ -82,10 +84,17 @@ const Listen = () => {
     };
 
 
+    const toggleSidebar = () => {
+        setSidebarOpen((prevState) => !prevState);
+    };
     return (
-        <div className="flex">
+        <div className="flex h-full">
+            <div className='toggle rounded-full bg-[#007bff] w-fit block ml-4 p-3 absolute z-10 sm:hidden' onClick={toggleSidebar}>
+                <i class="fa-solid fa-list text-xl text-white"></i>
+            </div>
             {/* Sidebar */}
-            <div className="side-nav h-[635px] w-[30%] bg-white pt-6">
+            <div className={`bg-[#0000002d] w-full h-full absolute top-0 left-0 ${isSidebarOpen ? 'block' : 'hidden'}`}></div>
+            <div className={`side-nav h-full w-[300px] sm:w-[30%] bg-white pt-6 absolute sm:static ${isSidebarOpen ? 'left-0' : 'left-[-100%]'} transition-left z-0 duration-300`}>
                 <div className="side-items pt-10 px-6">
                     <h2 className="pl-2">Recent</h2>
                     {file && file.length > 0 ? (
@@ -95,10 +104,10 @@ const Listen = () => {
                                 className="pdf-items is_chat mt-3 pt-5 px-5 flex justify-start items-center gap-2 cursor-pointer"
                                 onClick={() => SearchQuery(item)}
                             >
-                                <div className="img w-[30px]">
+                                <div className="img min-w-[25px] w-[30px]">
                                     <img src={PdfImg} className="w-full h-full" alt="PDF Icon" />
                                 </div>
-                                <div className="pdf-content">
+                                <div className="pdf-content truncate-text">
                                     <p>{item.name || "Pdf-view-demo.pdf"}</p>
                                 </div>
                             </div>
@@ -151,7 +160,7 @@ const Listen = () => {
             )}
 
             {/* Main Panel */}
-            <div className="listen-page p-6 pb-2 flex flex-col items-center justify-between w-[65%]">
+            <div className="listen-page p-6 pb-2 flex flex-col items-center justify-end w-full h-full">
                 <h1 className="text-3xl font-bold text-gray-800 mb-6">Listen to Your PDF Document</h1>
                 <div className="w-full bg-white shadow-md rounded-lg p-6">
                     {/* Text Input Section */}

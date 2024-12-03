@@ -36,7 +36,7 @@ const App = () => {
           console.log(result)
         }
       } catch {
-        alert("Unable to connect")
+        console.log("Unable to connect")
       }
     }
     startApi()
@@ -59,17 +59,17 @@ const App = () => {
 
   return (
     <div>
-      <main>
-        <header>
+      <main className='h-screen'>
+        <header className='h-[18%] bg-[#fff]'>
           <div className='pt-2 px-4 flex justify-start items-center'>
             <img src={Logo} alt='damin-logo' className='w-[80px] pr-3' />
-            <h1>Damin TTS App</h1>
+            <h1 className='text-2xl'>Damin TTS App</h1>
           </div>
-          <nav className='py-2 px-4 pl-20'>
+          <nav className='py-2 px-2 pr-0 sm:px-4 md:pl-20 mt-5'>
             <ul className='navs'>
               <li
                 data-name="upload"
-                className={`inline-block p-2 mx-3 ${activePage === "upload" ? "is_active" : ""
+                className={`inline-block sm:p-2 mx-1 sm:mx-3 max-md:text-sm ${activePage === "upload" ? "is_active" : ""
                   }`}
                 onClick={() => handleNavClick("upload")}
               >
@@ -77,7 +77,7 @@ const App = () => {
               </li>
               <li
                 data-name="summarizer"
-                className={`inline-block p-4 mx-3 ${activePage === "summarizer" ? "is_active" : ""
+                className={`inline-block sm:p-2 mx-1 sm:mx-3 max-md:text-sm ${activePage === "summarizer" ? "is_active" : ""
                   }`}
                 onClick={() => handleNavClick("summarizer")}
               >
@@ -85,24 +85,24 @@ const App = () => {
               </li>
               <li
                 data-name="listen"
-                className={`inline-block p-4 mx-3 ${activePage === "listen" ? "is_active" : ""
+                className={`inline-block sm:p-2 mx-1 sm:mx-3 max-md:text-sm ${activePage === "listen" ? "is_active" : ""
                   }`}
                 onClick={() => handleNavClick("listen")}
               >
                 Listen
               </li>
-              <li
+              {/* <li
                 data-name="history"
                 className={`inline-block p-4 mx-3 ${activePage === "history" ? "is_active" : ""
                   }`}
                 onClick={() => handleNavClick("history")}
               >
                 History
-              </li>
+              </li> */}
             </ul>
           </nav>
         </header>
-        <main className="body">{renderPage()}</main>
+        <main className="body h-[80%]">{renderPage()}</main>
       </main>
     </div>
   )

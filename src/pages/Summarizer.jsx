@@ -12,6 +12,7 @@ const Summarizer = () => {
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(true);
     const messagesEndRef = useRef(null);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const pdfName = useRef(null);
 
@@ -116,10 +117,19 @@ const Summarizer = () => {
         }
     };
 
+
+    const toggleSidebar = () => {
+        setSidebarOpen((prevState) => !prevState);
+    };
+
     return (
-        <div className="mr-16 overflow-auto relative" key={query}>
-            <div className="flex justify-center items-end bg-gray-100">
-                <div className="side-nav h-[635px] w-[30%] bg-white pt-6">
+        <div className="pr-4 sm:mr-16 relative h-full" key={query}>
+            <div className='toggle rounded-full bg-[#007bff] w-fit block ml-4 p-3 absolute z-10 sm:hidden' onClick={toggleSidebar}>
+                <i class="fa-solid fa-list text-xl text-white"></i>
+            </div>
+            <div className="flex justify-center items-start bg-gray-100 h-full">
+                <div className={`bg-[#0000002d] w-full h-full absolute top-0 left-0 ${isSidebarOpen ? 'block' : 'hidden'}`}></div>
+                <div className={`side-nav h-full w-[300px] sm:w-[30%] bg-white pt-6 absolute sm:static ${isSidebarOpen ? 'left-0' : 'left-[-100%]'} transition-left z-0 duration-300`}>
                     {loading ? (
                         <p>Loading.....</p>
                     ) : (
@@ -132,11 +142,11 @@ const Summarizer = () => {
                                         className="pdf-items is_chat mt-3 pt-5 px-5 flex justify-start items-center gap-2"
                                         onClick={() => SearchQuery(item.id)}
                                     >
-                                        <div className="img w-[30px]">
+                                        <div className="img min-w-[25px] w-[30px]">
                                             <img src={PdfImg} className="w-full h-full" alt="PDF Icon" />
                                         </div>
                                         <div className="pdf-content" data-details="">
-                                            <p ref={pdfName}>{item.name || "Pdf-view-demo.pdf"}</p>
+                                            <p ref={pdfName} className="truncate-text">{item.name || "Pdf-view-demo.pdf"}</p>
                                         </div>
                                     </div>
                                 ))
@@ -146,8 +156,8 @@ const Summarizer = () => {
                         </div>
                     )}
                 </div>
-                <div className="w-full mb-2 rounded-lg shadow-lg ml-6 flex flex-col h-[635px] overflow-y-scroll">
-                    <div className="flex-1 p-4 overflow-y-auto space-y-3">
+                <div className="w-full mb-2 rounded-lg shadow-lg ml-6 flex flex-col h-full">
+                    <div className="flex-1 p-4 overflow-y-scroll space-y-3">
                         <div
                             className={`w-full grid`}
                         >
@@ -167,9 +177,9 @@ const Summarizer = () => {
                                             {message.text}
                                         </ReactMarkdown>
                                     )}
+                                    <div ref={messagesEndRef}></div>
                                 </div>
                             ))}
-                            <div ref={messagesEndRef}></div>
                         </div>
                     </div>
                     {/* Chat Input */}
@@ -192,7 +202,7 @@ const Summarizer = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -8,7 +8,6 @@
     font-family: 'Nerd', sans-serif;
 }
 
-
 h1 {
     font-size: 1.8rem;
     font-weight: 700;
@@ -66,3 +65,12 @@ p {
     background-color: #3d3f42;
     color: #f4f4ff;
 }
+
+.truncate-text {
+    display: -webkit-box; /* Enable webkit line clamping */
+    -webkit-line-clamp: 2; /* Limit to 3 lines */
+    -webkit-box-orient: vertical; /* Vertical box orientation */
+    overflow: hidden; /* Hide overflowing content */
+    text-overflow: ellipsis; /* Add ellipsis at the end of overflow */
+    word-wrap: break-word; /* Allow wrapping for long words */
+  }
