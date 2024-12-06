@@ -62,7 +62,7 @@ const App = () => {
       <main className='h-screen'>
         <header className='h-[18%] bg-[#fff]'>
           <div className='pt-2 px-4 flex justify-start items-center'>
-            <img src={Logo} alt='damin-logo' className='w-[80px] pr-3' />
+            <img src={Logo} alt='damin logo' className='w-[80px] pr-3' />
             <h1 className='text-2xl'>Damin TTS App</h1>
           </div>
           <nav className='py-2 px-2 pr-0 sm:px-4 md:pl-20 mt-5'>

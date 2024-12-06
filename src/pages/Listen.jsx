@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useState, useEffect } from 'react';
 import PdfImg from '../file/pdf-img-view.png';
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
 import ReactMarkdown from 'react-markdown';
 
 const Listen = () => {

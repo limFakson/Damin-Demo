@@ -130,7 +130,7 @@ const Upload = () => {
                                     <div className="pdf-img w-full h-[180px] sm:h-[200px] flex justify-center items-center bg-gray-200 rounded-md">
                                         <img
                                             src={PdfImg}
-                                            alt="Uploaded PDF"
+                                            alt="Uploaded PDF for damin"
                                             className="w-[120px] sm:w-[150px] h-auto object-contain"
                                         />
                                     </div>
