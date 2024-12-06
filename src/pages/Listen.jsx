@@ -80,18 +80,16 @@ const Listen = () => {
         }
 
         if (soundInstanceRef.current) {
-            // Handle play/pause toggling
             if (isPlaying) {
-                soundInstanceRef.current.pause(); // Pause the audio
+                soundInstanceRef.current.pause();
                 setIsPlaying(false);
             } else {
-                soundInstanceRef.current.play(); // Resume the audio
+                soundInstanceRef.current.play();
                 setIsPlaying(true);
             }
             return;
         }
 
-        // Create a new Howler instance if none exists
         soundInstanceRef.current = new Howl({
             src: [audio],
             html5: true,
