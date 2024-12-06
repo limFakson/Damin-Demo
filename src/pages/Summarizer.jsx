@@ -13,6 +13,7 @@ const Summarizer = () => {
     const [loading, setLoading] = useState(true);
     const messagesEndRef = useRef(null);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const loadingState = useRef(null);
 
     const pdfName = useRef(null);
 
@@ -37,14 +38,15 @@ const Summarizer = () => {
                 const data = JSON.parse(event.data);
 
                 if (Array.isArray(data)) {
-                    console.log(data.map((item) => ({ text: item.text, type: item.type })))
                     const botMessages = data.map((item) => ({ text: item.text, type: item.type }));
                     setMessages((prev) => [...prev, ...botMessages]);
                 } else {
                     const botMessage = { text: data, type: "received" };
                     setMessages((prev) => [...prev, botMessage]);
                 }
+                loadingState.current.style.display = "None";
             } catch (error) {
+                loadingState.current.style.display = "None";
                 console.error("Failed to parse WebSocket message:", error);
                 const botMessage = { text: event.data, type: "received" };
                 setMessages((prev) => [...prev, botMessage]);
@@ -77,6 +79,7 @@ const Summarizer = () => {
             }
         };
 
+        loadingState.current.style.display = "None";
         setTimeout(() => {
             getFilesFromLocalStorage();
             setLoading(false);
@@ -100,6 +103,7 @@ const Summarizer = () => {
     const SearchQuery = (id) => {
         const name = pdfName.current.textContent;
         const newUrl = `${window.location.pathname}?c=${name}`;
+        loadingState.current.style.display = "flex";
         window.history.pushState(null, "", newUrl);
         setQuery(id);
 
@@ -124,6 +128,7 @@ const Summarizer = () => {
 
     return (
         <div className="pr-4 sm:mr-16 relative h-full" key={query}>
+            <div ref={loadingState} className='fixed top-0 loading-state flex h-screen w-full bg-[#0000004e] items-center justify-center z-20 text-3xl'>Loading....</div>
             <div className='toggle rounded-full bg-[#007bff] w-fit block ml-4 p-3 absolute z-10 sm:hidden' onClick={toggleSidebar}>
                 <i class="fa-solid fa-list text-xl text-white"></i>
             </div>

@@ -1,10 +1,12 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react';
 import PdfImg from '../file/pdf-img-view.png'
 
 const Upload = () => {
+    const ApiUrl = process.env.REACT_APP_API_URL
     const uploadButton = useRef(null);
     const confirmation = useRef(null);
+    const loadingState = useRef(null);
 
     const [uploadedFile, setUploadedFile] = useState(null);
 
@@ -18,6 +20,10 @@ const Upload = () => {
             alert("Please upload a valid PDF file.");
         }
     };
+
+    useEffect(() => {
+        loadingState.current.style.display = "None";
+    })
 
     const handleRemoveFile = () => {
         setUploadedFile(null);
@@ -34,31 +40,35 @@ const Upload = () => {
     };
 
     const pdfSentUpload = async () => {
-        const ApiUrl = "http://localhost:8000/upload/pdf"
+        loadingState.current.style.display = "flex"
         try {
             const formData = new FormData();
             formData.append("file", uploadedFile);
-            const response = await fetch(`${ApiUrl}`, {
+            const response = await fetch(`${ApiUrl}/upload/pdf`, {
                 method: "POST",
                 body: formData,
             });
 
             if (response.ok) {
+                loadingState.current.style.display = "None";
                 const result = await response.json();
                 console.log("API Response:", result);
                 confirmation.current.textContent = await result.message;
                 saveFileToLocalStorage(result.pdf);
             } else {
+                loadingState.current.style.display = "None";
                 confirmation.current.textContent = response.statusText
                 console.error("Error:", response.status, response.statusText);
             }
         } catch (error) {
+            loadingState.current.style.display = "None";
             console.error("Network error:", error);
         }
     }
 
     return (
-        <div className="p-4 sm:p-6 md:p-8 my-4 md:my-8 mx-4 lg:mx-12">
+        <div className="p-4 sm:p-6 md:p-8 my-4 md:my-8 mx-4 lg:mx-12 lg:ml-16">
+            <div ref={loadingState} className='fixed top-0 left-0 loading-state h-screen w-full bg-[#0000004e] items-center justify-center z-20 text-3xl'>Loading....</div>
             <div className="upload flex flex-col md:flex-row flex-wrap justify-center items-start">
                 {/* Info Section */}
                 <div className="form_upload w-full md:w-[50%] mb-8 md:mb-0 pt-6 md:pt-10 pr-0 md:pr-6 lg:pr-10">
@@ -124,7 +134,7 @@ const Upload = () => {
                                             className="w-[120px] sm:w-[150px] h-auto object-contain"
                                         />
                                     </div>
-                                    <p className="text-center text-gray-600 mt-4 text-sm sm:text-base truncate">{uploadedFile.name}</p>
+                                    <p className="max-w-[310px] break-words text-center text-gray-600 mt-4 text-sm sm:text-base">{uploadedFile.name}</p>
                                     <button
                                         className="mt-4 bg-[#007bff] hover:bg-blue-600 text-white rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base"
                                         onClick={handleRemoveFile}

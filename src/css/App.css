@@ -74,3 +74,7 @@ p {
     text-overflow: ellipsis; /* Add ellipsis at the end of overflow */
     word-wrap: break-word; /* Allow wrapping for long words */
   }
+
+  .loading-state{
+    transition: linear .5s;
+  }
