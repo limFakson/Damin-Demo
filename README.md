@@ -1,70 +1,100 @@
-# Getting Started with Create React App
+# Project Damin - UI Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This document outlines the user interface (UI) structure and functionality of **Project Damin**, focusing on the components and interactions we've implemented over the last week. This will serve as a comprehensive guide for developers and contributors.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+1. [Overview](#overview)
+2. [Components](#components)
+    - [Audio Controls](#audio-controls)
+    - [Speed and Pitch Sliders](#slider-properties)
+    - [Popout Navigation](#popout-navigation)
+3. [State Management](#state-management)
+4. [API Integration](#api-integration)
+5. [Features](#features)
+6. [Future Improvements](#future-improvements)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Overview
 
-### `npm test`
+The UI for **Project Damin** is designed to deliver a smooth user experience for interacting with text and audio files. It features:
+- **Dynamic page-based text rendering** for PDFs.
+- **Audio playback controls** with speed and pitch adjustment.
+- **Popout navigation** for quick interaction.
+- **Responsive design** for usability on both desktop and mobile devices.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Components
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Audio Controls
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The audio controls allow users to play, pause, and download audio files generated from PDF text.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Buttons**:
+  - `Play Audio`: Starts audio playback.
+  - `Pause Audio`: Pauses ongoing playback.
+  - `Download Audio`: Triggers a download of the current audio file.
 
-### `npm run eject`
+### Slider Properties
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### Speed
+- **Range**: `0.5x` to `2.0x`
+- **Step**: `0.1`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Pitch
+- **Range**: `0.5x` to `2.0x`
+- **Step**: `0.1`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## State Management
 
-## Learn More
+The application uses **React state hooks** to manage interactions dynamically. Key state variables include:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **`audio`**: Stores the audio file URL for playback.
+- **`speed`**: Controls the playback speed of audio.
+- **`pitch`**: Adjusts the pitch for audio playback.
+- **`isPlaying`**: Tracks whether audio is currently playing.
+- **`textInput`**: Stores the formatted text from the PDF.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## API Integration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The UI interacts with a backend API for the following operations:
 
-### Analyzing the Bundle Size
+### Fetching PDF Text
+- **Endpoint**: `/pdf/text/:id`
+- **Response**: Returns an array of strings representing page content.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Generating Audio
+- **Endpoint**: `/pdf/audio/:id`
+- **Parameters**: `pages` (array of page numbers)
+- **Response**: Returns a URL for the audio file.
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Features
 
-### Advanced Configuration
+### Live Audio Playback
+- Supports **dynamic speed and pitch adjustments**.
+- Allows **pausing and resuming** audio playback.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### PDF Page Navigation
+- Enables users to view text content with appropriate **page labeling**.
 
-### Deployment
+### Audio Download
+- Provides direct **audio file download** functionality.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+### Key Features of This Documentation:
+- **Pure Markdown**: Includes headings, code snippets, and lists for clarity.
+- **Component Focused**: Documents each UI component separately.
+- **Developer-Friendly**: Provides code examples to quickly understand the implementation.
+- **Future-Oriented**: Suggests improvements for future development.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+You can adapt this template as your project grows! 🚀

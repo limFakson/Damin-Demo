@@ -44,16 +44,17 @@ const Summarizer = () => {
                     const botMessage = { text: data, type: "received" };
                     setMessages((prev) => [...prev, botMessage]);
                 }
-                loadingState.current.style.display = "None";
             } catch (error) {
-                loadingState.current.style.display = "None";
                 console.error("Failed to parse WebSocket message:", error);
                 const botMessage = { text: event.data, type: "received" };
                 setMessages((prev) => [...prev, botMessage]);
             }
+            setSidebarOpen((prevState) => !prevState);
+            loadingState.current.style.display = "None";
         };
 
         ws.onerror = (error) => {
+            loadingState.current.style.display = "None";
             console.error("WebSocket error:", error);
         };
 
@@ -151,7 +152,7 @@ const Summarizer = () => {
                                             <img src={PdfImg} className="w-full h-full" alt="PDF Icon" />
                                         </div>
                                         <div className="pdf-content" data-details="">
-                                            <p ref={pdfName} className="truncate-text">{item.name || "Pdf-view-demo.pdf"}</p>
+                                            <p ref={pdfName} className="truncate-text ">{item.name || "Pdf-view-demo.pdf"}</p>
                                         </div>
                                     </div>
                                 ))
@@ -169,9 +170,9 @@ const Summarizer = () => {
                             {messages.map((message, index) => (
                                 <div key={index} className='grid'>
                                     {message.type !== "sent" ? (
-                                        <div className='self-start flex items-start justify-start px-4 py-2 rounded-lg my-2 w-[80%]'>
-                                            <img src={Logo} className='w-[40px] h-[35px]' alt="" />
-                                            <div className='pl-4 pt-2'>
+                                        <div className='self-start flex items-start justify-start sm:px-4 py-2 rounded-lg my-2 w-[90%] sm:w-[80%]'>
+                                            <img src={Logo} className='w-[30px] h-[30px] sm:w-[40px] sm:h-[35px]' alt="" />
+                                            <div className='pl-4 sm:pt-2 max-sm:text-xs font-extralight max-sm:leading-5'>
                                                 <ReactMarkdown>
                                                     {message.text}
                                                 </ReactMarkdown>

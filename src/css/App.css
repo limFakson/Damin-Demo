@@ -72,7 +72,9 @@ p {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break: break-word;
     word-wrap: break-word;
+    max-width: 100%;
   }
 
   .loading-state{

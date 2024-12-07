@@ -66,9 +66,12 @@ const Listen = () => {
                 loadingState.current.style.display = "None";
                 console.error("API Error:", await response.text());
             }
+
+            setSidebarOpen((prevState) => !prevState);
         } catch (error) {
             loadingState.current.style.display = "None";
             console.error("Error fetching audio:", error);
+            setSidebarOpen((prevState) => !prevState);
         }
 
     };
@@ -155,7 +158,7 @@ const Listen = () => {
 
     const SearchQuery = (item) => {
         setSlide(null); // Reset previous slide
-        setIsPopoutOpen(false); // Close any open modal
+        setIsPopoutOpen(false);
         setTimeout(() => {
             const name = item.name || "Unknown";
             const newUrl = `${window.location.pathname}?c=${name}`;
@@ -268,7 +271,7 @@ const Listen = () => {
                 <h1 className="text-3xl font-bold text-gray-800 mb-6">Listen to Your PDF Document</h1>
                 <div className="max-w-full w-full bg-white shadow-md rounded-lg p-6">
                     {/* Text Input Section */}
-                    <ReactMarkdown className="border w-full min-h-28 max-h-[26rem] overflow-y-scroll">
+                    <ReactMarkdown className="border w-full min-h-28 max-h-[19rem] sm:max-h-[26rem] overflow-y-scroll">
                         {textInput}
                     </ReactMarkdown>
                     {/* File Upload Section */}
@@ -285,7 +288,7 @@ const Listen = () => {
                     <div className="controls flex justify-between items-center mb-4">
                         <button
                             onClick={handlePlayAudio}
-                            className={`px-6 py-2 rounded-md ${isPlaying
+                            className={`px-3 sm:px-6 py-2 rounded-md ${isPlaying
                                 ? "bg-gray-400 text-white"
                                 : "bg-green-500 text-white hover:bg-green-600"
                                 }`}
@@ -294,7 +297,7 @@ const Listen = () => {
                         </button>
                         <button
                             onClick={handleDownloadAudio}
-                            className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600"
+                            className="bg-blue-500 text-white px-3 sm:px-6 py-2 rounded-md hover:bg-blue-600"
                         >
                             Download Audio
                         </button>
