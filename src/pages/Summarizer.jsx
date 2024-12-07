@@ -134,7 +134,7 @@ const Summarizer = () => {
                 <i class="fa-solid fa-list text-xl text-white"></i>
             </div>
             <div className="flex justify-center items-start bg-gray-100 h-full">
-                <div className={`bg-[#0000002d] w-full h-full absolute top-0 left-0 ${isSidebarOpen ? 'block' : 'hidden'}`}></div>
+                <div className={`bg-[#0000002d] w-full h-full absolute sm:hidden top-0 left-0 ${isSidebarOpen ? 'block' : 'hidden'}`}></div>
                 <div className={`side-nav h-full w-[300px] sm:w-[30%] bg-white pt-6 absolute sm:static ${isSidebarOpen ? 'left-0' : 'left-[-100%]'} transition-left z-0 duration-300`}>
                     {loading ? (
                         <p>Loading.....</p>
