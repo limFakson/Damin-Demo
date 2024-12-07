@@ -31,6 +31,7 @@ const Summarizer = () => {
 
         ws.onopen = () => {
             console.log("WebSocket connection established");
+            setSidebarOpen((prevState) => !prevState);
         };
 
         ws.onmessage = (event) => {
@@ -49,7 +50,6 @@ const Summarizer = () => {
                 const botMessage = { text: event.data, type: "received" };
                 setMessages((prev) => [...prev, botMessage]);
             }
-            setSidebarOpen((prevState) => !prevState);
             loadingState.current.style.display = "None";
         };
 
@@ -59,6 +59,8 @@ const Summarizer = () => {
         };
 
         ws.onclose = () => {
+            alert("Unable to establish websocket connection")
+            loadingState.current.style.display = "None";
             console.log("WebSocket connection closed");
         };
 
