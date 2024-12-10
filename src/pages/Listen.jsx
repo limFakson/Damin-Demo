@@ -157,7 +157,7 @@ const Listen = () => {
     }, []);
 
     const SearchQuery = (item) => {
-        setSlide(null); // Reset previous slide
+        setSlide(null);
         setIsPopoutOpen(false);
         setTimeout(() => {
             const name = item.name || "Unknown";

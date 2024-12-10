@@ -61,7 +61,6 @@ const Summarizer = () => {
         ws.onclose = () => {
             alert("Unable to establish websocket connection")
             loadingState.current.style.display = "None";
-            console.log("WebSocket connection closed");
         };
 
         setSocket(ws);
