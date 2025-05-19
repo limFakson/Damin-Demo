@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import Logo from "./file/Asset 3figma2.png";
 import './index.css';
-import './css/App.css'
+import './css/App.css';
+import './css/backdoor.css';
 import { useState } from "react";
 import Upload from "./pages/Upload";
 import Summarizer from "./pages/Summarizer";
